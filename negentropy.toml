@@ -1,0 +1,28 @@
+[scan]
+include = [
+  "crates/**/*.rs",
+  "docs/**/*.md",
+]
+exclude = [
+  "**/target/**",
+]
+
+[limit]
+block = 3
+path = 3
+
+[comment]
+allow = false
+
+[word]
+single = true
+
+[[boundary]]
+paths = [".github/**"]
+note = "release manager is vendored ci infra; product depth and comment laws do not apply"
+allow = ["path", "comment"]
+
+[[boundary]]
+paths = [".runseal/**"]
+note = "runseal operator glue is vendored; guarded by deno fmt and deno check instead"
+allow = ["path", "comment", "word"]
