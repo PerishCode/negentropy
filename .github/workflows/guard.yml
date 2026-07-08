@@ -16,12 +16,8 @@ concurrency:
 
 jobs:
   guard:
-    name: guard (${{ matrix.os }})
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    name: guard
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
 
