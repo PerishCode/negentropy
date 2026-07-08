@@ -1,0 +1,47 @@
+name: guard
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guard-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    name: guard (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Install runseal
+        shell: bash
+        run: |
+          set -euo pipefail
+          cargo install --git https://github.com/PerishCode/runseal --locked runseal
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          runseal :guard

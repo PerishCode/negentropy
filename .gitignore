@@ -1,0 +1,6 @@
+/target
+/.task/
+/.local/
+__pycache__/
+/.github/release.env
+node_modules/
